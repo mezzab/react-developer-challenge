@@ -1,17 +1,26 @@
-# React Dev Challenge
+# React dApp Dev Challenge
 
-The idea of this challenge is to evaluate your skills as a [React](https://reactjs.org) Developer.
+The idea of this challenge is to evaluate your skills as a **React dApp Developer**. You should be able to create a dApp with React that interacts with [Compound's cDAI contract](https://kovan.etherscan.io/address/0xF0d0EB522cfa50B716B3b1604C4F0fA6f04376AD) in [Kovan](https://kovan.etherscan.io/).
 
-# Exercise
+If you want to apply to this position, please send the following to jobs at exact dot ly:
+1. The URL with the dApp up and running
+2. Your solution in a ***private repository***
 
-1. Connect and disconnect a browser wallet like [MetaMask](https://metamask.io/).
-2. Show the amount of ETH on the connected wallet.
-3. List the top 10 active cryptocurrencies with latest market data sorted by market cap from https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyListingsLatest. *Note*: You can get a free API key from https://pro.coinmarketcap.com/signup/?plan=0.
-4. Show how much of each asset the user can buy with the amount of ETH in the wallet. E.g.: if the user has 2 ETH, how much of a BTC can he buy with it?
+The team will review your solution only if the online dApp you send does [all requirements requested here](#the-dapp-should-be-able-to).
 
-# Think about
+## The dApp should be able to:
 
-- Taking a look at the CoinMarketCap API documentation
+1. Connect and disconnect a wallet like [MetaMask](https://metamask.io/)
+2. Get the cDAI balance in the wallet and show it in the UI
+3. Deposit DAI to the contract directly from the UI
+4. Get the transaction history of the connected wallet
+
+## Think about
+
+- You can use this [faucet](https://faucet.paradigm.xyz/) to get tokens to test your dApp
+- cDAI and DAI are not 1:1, you should display the amount in cDAI
+- You can deposit, borrow, repay and redeem directly from [Compound](https://app.compound.finance/) if you are connected to the Kovan testnet
+- If you want to use a subgraph, you can use [this one](https://thegraph.com/hosted-service/subgraph/juanigallo/cdai-kovan-subgraph) or create your own
 - How much logic do you offload out of the UI components?
 - Think about the UX, minimize the number of interactions to use the application
 - Take care of your environment variables
@@ -31,5 +40,3 @@ The things that we will pay attention to are:
 - Type all elements used in the app
 - Add unit tests, with [Jest](https://jestjs.io/) for functions and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for components
 - Add integration tests with [Cypress](https://www.cypress.io/) or similar testing frameworks
-
-If you want to apply to this position please share your solution in a ***private repo*** to the following email: jobs@exact.ly.
