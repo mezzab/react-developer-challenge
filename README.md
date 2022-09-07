@@ -12,9 +12,8 @@ The team will review your solution only if the online app you send does [all req
 
 Required technologies to be used: Sass, React and TypeScript. Please avoid using CSS-like frameworks.
 
-1. List the top ten assets traded in [CoinGecko](https://www.coingecko.com/) sorted by Market Cap (descending sort).
-2. Show historic price graph (in USD) for one or more assets, with five assets as maximum.
-3. User should be able to change assets and time frame to be shown (1 day, 1 month, 6 months, 1 year and 5 years). time in X-axis, price in Y-axis.
+1. List the top five assets traded in [CoinGecko](https://www.coingecko.com/) sorted by Market Cap (descending sort) in a table. Show whatever information you consider appropriate.
+2. Separately, show historic price graph (in USD) for the assets listed in the previous table. User should be able to change assets and time frame to be shown (1 day, 1 month, 6 months, 1 year and 5 years). time in X-axis, price in Y-axis.
 
 These are the minimum requirements, you can add whatever you want to make the app more appealing.
 
