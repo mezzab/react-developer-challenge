@@ -10,7 +10,7 @@ The team will review your solution only if the online app you send does [all req
 
 ## The app should be able to:
 
-Required technologies to be used: Sass, React and TypeScript. Please avoid using CSS-like frameworks.
+Required technologies to be used: Sass, React and TypeScript. You can use CSS-like frameworks like [MUI](https://mui.com/) if you want.
 
 1. List the top five assets traded in [CoinGecko](https://www.coingecko.com/) sorted by Market Cap (descending sort) in a table. Show whatever information you consider appropriate.
 2. Separately, show historic price graph (in USD) for the assets listed in the previous table. User should be able to change assets and time frame to be shown (1 day, 1 month, 6 months, 1 year and 5 years). time in X-axis, price in Y-axis.
