@@ -3,8 +3,9 @@
 The idea of this challenge is to evaluate your skills as a **React Developer**.
 
 If you want to apply to this position, please send the following to **jobs at exact dot ly**:
+
 1. The URL with the app up and running
-2. Your solution in a ***private repository***
+2. Your solution in a **_private repository_**
 
 The team will review your solution only if the online app you send does [all requirements requested here](#the-app-should-be-able-to).
 
