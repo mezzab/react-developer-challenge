@@ -1,5 +1,5 @@
-import { HistoricalChart, ListCoins } from '../config/coinGeckoURLs'
-import { KapowResponse, CoinDetails, CoinHistory } from './types'
+import { HistoricalChart, ListCoins, SingleCoin } from '../config/coinGeckoURLs'
+import { KapowResponse, CoinDetails, CoinHistory, CoinInfo } from './types'
 import axios, { AxiosResponse } from 'axios'
 
 export async function getCoinList(
@@ -33,6 +33,27 @@ export async function getCoinHistory(
     )
     if (response.status === 200) {
       return { success: true, value: response.data as CoinHistory }
+    }
+    return {
+      success: false,
+      error: { statusCode: response.status, message: response.statusText },
+    }
+  } catch (error: any) {
+    return {
+      success: false,
+      error: { statusCode: 0, message: error?.message },
+    }
+  }
+}
+
+export async function getCoinInfo(
+  id: string
+): Promise<KapowResponse<CoinInfo>> {
+  try {
+    const response: AxiosResponse = await axios.get(SingleCoin(id))
+
+    if (response.status === 200) {
+      return { success: true, value: response.data as CoinInfo }
     }
     return {
       success: false,

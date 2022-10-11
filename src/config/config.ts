@@ -4,7 +4,7 @@ export const CurrencyList = [
   { currency: 'EUR', symbol: '€' },
 ]
 
-export const ChartWindows = [
+export const ChartDaysOptions = [
   {
     label: '1d',
     value: '1',

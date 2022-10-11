@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <header>
-      <div> Crypto Top 5 </div>
+      <h1> Crypto Top 5 </h1>
       <Menu
         options={CurrencyList.map((x) => x.currency)}
         onSelect={(o) => setCurrency(o)}

@@ -46,3 +46,21 @@ export interface CoinDetails {
 export type CoinHistory = {
   prices: number[][]
 }
+
+type language = 'ar' | 'es' | 'en'
+export interface CoinInfo {
+  description: {
+    [key in language]: string
+  }
+  image: {
+    small: string
+    large: string
+    thump: string
+  }
+  id: string
+  links: {
+    blockchain_site: string
+  }
+  market_cap_rank: number
+  symbol: string
+}

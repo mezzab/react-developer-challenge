@@ -4,13 +4,13 @@ import { getCoinHistory } from '../../services/coinGecko'
 import { CurrencyState } from '../../context/currency'
 import { formatChartData } from '../../helpers/formatChartData'
 import { CoinHistory, Error } from '../../services/types'
-import { CoinState } from '../../context/coin'
+import { SelectedCoinState } from '../../context/selectedCoin'
 import Button from '@mui/material/Button'
 import ButtonGroup from '@mui/material/ButtonGroup'
 import Box from '@mui/material/Box'
-
-import { ChartWindows } from '../../config/config'
-import { Paper } from '@mui/material'
+import { ChartDaysOptions } from '../../config/config'
+import { CircularProgress, Paper } from '@mui/material'
+import './HistoryChart.css'
 
 export default function HistoryChart(): ReactElement | null {
   const [loading, setLoading] = useState(false)
@@ -18,15 +18,15 @@ export default function HistoryChart(): ReactElement | null {
   const { currency } = CurrencyState()
   const [days, setDays] = useState('30')
   const [coinHistory, setCoinHistory] = useState<CoinHistory | null>(null)
-  const { coin } = CoinState()
+  const { selectedCoin } = SelectedCoinState()
 
   useEffect(() => {
     fetchCoinHistory()
-  }, [days, coin])
+  }, [days, selectedCoin])
 
   const fetchCoinHistory = async () => {
     setLoading(true)
-    const res = await getCoinHistory(coin, currency, days)
+    const res = await getCoinHistory(selectedCoin.id, currency, days)
 
     if (res.success) {
       setCoinHistory(res.value)
@@ -45,10 +45,18 @@ export default function HistoryChart(): ReactElement | null {
   }
 
   return (
-    <Paper sx={{ width: '100%', mb: 2, textAlign: 'center', padding: '0.5em' }}>
-      <Box>
+    <Paper sx={{ width: '100%', mb: 2, textAlign: 'center' }}>
+      <Box
+        sx={{
+          padding: '2em',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div className="selectedCoin"> {selectedCoin.name} </div>
+        {loading && <CircularProgress />}
         <ButtonGroup variant="contained" aria-label="primary button group">
-          {ChartWindows.map((x, i) => {
+          {ChartDaysOptions.map((x, i) => {
             const selected = x.value === days
             return (
               <Button

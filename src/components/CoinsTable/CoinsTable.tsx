@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 
 import { CurrencyState } from '../../context/currency'
 import Box from '@mui/material/Box'
@@ -13,7 +13,8 @@ import Paper from '@mui/material/Paper'
 import { visuallyHidden } from '@mui/utils'
 import { getCoinList } from '../../services/coinGecko'
 import { CoinDetails } from '../../services/types'
-import { CoinState } from '../../context/coin'
+import { SelectedCoinState } from '../../context/selectedCoin'
+import './CoinsTable.css'
 
 interface ColumnCell {
   disablePadding: boolean
@@ -45,7 +46,7 @@ const columns: readonly ColumnCell[] = [
     id: 'price_change_percentage_24h',
     numeric: true,
     disablePadding: false,
-    label: 'Market Cap',
+    label: '24h change',
   },
 ]
 
@@ -55,7 +56,7 @@ function CoinList() {
   const [error, setError] = useState(false)
 
   const { currency } = CurrencyState()
-  const { coin, setCoin } = CoinState()
+  const { selectedCoin, setSelectedCoin } = SelectedCoinState()
 
   const fetchCoins = async () => {
     setLoading(true)
@@ -76,8 +77,9 @@ function CoinList() {
   return (
     <EnhancedTable
       rows={coins}
-      selectedCoin={coin}
-      onRowClick={(row) => setCoin(row.id)}
+      selectedCoin={selectedCoin.id}
+      onRowClick={(row) => setSelectedCoin({ id: row.id, name: row.name })}
+      currency={currency}
     />
   )
 }
@@ -112,7 +114,7 @@ function getComparator<Key extends keyof any>(
 
 interface EnhancedTableHeadProps {
   onRequestSort: (
-    event: React.MouseEvent<unknown>,
+    event: MouseEvent<unknown>,
     property: keyof CoinDetails
   ) => void
   order: Order
@@ -122,7 +124,7 @@ interface EnhancedTableHeadProps {
 function EnhancedTableHead(props: EnhancedTableHeadProps) {
   const { order, orderBy, onRequestSort } = props
   const createSortHandler =
-    (property: keyof CoinDetails) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof CoinDetails) => (event: MouseEvent<unknown>) => {
       onRequestSort(event, property)
     }
 
@@ -137,6 +139,7 @@ function EnhancedTableHead(props: EnhancedTableHeadProps) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              sx={{ fontWeight: 'bold' }}
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -159,15 +162,21 @@ interface EnhancedTableProps {
   rows: CoinDetails[]
   onRowClick?: (row: CoinDetails) => void
   selectedCoin: string
+  currency: string
 }
 
-function EnhancedTable({ rows, onRowClick, selectedCoin }: EnhancedTableProps) {
+function EnhancedTable({
+  rows,
+  onRowClick,
+  selectedCoin,
+  currency,
+}: EnhancedTableProps) {
   const [order, setOrder] = useState<Order>('desc')
   const [orderBy, setOrderBy] = useState<keyof CoinDetails>('market_cap')
   const [selected, setSelected] = useState<string>(selectedCoin)
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    event: MouseEvent<unknown>,
     property: keyof CoinDetails
   ) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -175,9 +184,31 @@ function EnhancedTable({ rows, onRowClick, selectedCoin }: EnhancedTableProps) {
     setOrderBy(property)
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, row: CoinDetails) => {
+  const handleClick = (event: MouseEvent<unknown>, row: CoinDetails) => {
     setSelected(row.id)
     onRowClick && onRowClick(row)
+  }
+
+  const formatNumberWithCurrencySymbol = (
+    number: number,
+    noFractionDigits: boolean = false
+  ) => {
+    /* todo: create a language context similar to currency.tsx */
+    const fractionDigits = noFractionDigits ? 0 : undefined
+
+    return number.toLocaleString('en-US', {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: fractionDigits,
+      maximumFractionDigits: fractionDigits,
+    })
+  }
+
+  const formatPercentageNumber = (number: number) => {
+    const fixedNumber = number.toFixed(2)
+    return (
+      <div className={number < 0 ? 'negative' : 'positive'}>{fixedNumber}%</div>
+    )
   }
 
   return (
@@ -210,10 +241,14 @@ function EnhancedTable({ rows, onRowClick, selectedCoin }: EnhancedTableProps) {
                     <TableCell component="th" id={labelId} scope="row">
                       {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.current_price}</TableCell>
-                    <TableCell align="right">{row.market_cap}</TableCell>
                     <TableCell align="right">
-                      {row.price_change_percentage_24h}
+                      {formatNumberWithCurrencySymbol(row.current_price)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatNumberWithCurrencySymbol(row.market_cap, true)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatPercentageNumber(row.price_change_percentage_24h)}
                     </TableCell>
                   </TableRow>
                 )
