@@ -5,7 +5,7 @@ import HistoryChart from '../HistoryChart/HistoryChart'
 
 const Body = () => {
   return (
-    <Box sx={{ flexGrow: 1, margin: '3em' }}>
+    <Box className="responsiveMargin" sx={{ flexGrow: 1 }}>
       <Grid spacing={4}>
         <Grid>
           <CoinList />

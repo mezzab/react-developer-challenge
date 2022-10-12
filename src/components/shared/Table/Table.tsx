@@ -91,12 +91,8 @@ const EnhancedTableHead = <T extends BasicItem>(
 
 interface EnhancedTableProps<T> {
   rows: T[]
-  rowsRenderer: ({
-    row,
-    isItemSelected,
-    handleClick,
-    index,
-  }: {
+  rowsRenderer: (props: {
+    key: number
     row: T
     isItemSelected: boolean
     handleClick: (e: MouseEvent<unknown>, row: T) => void
@@ -135,11 +131,7 @@ const EnhancedTable = <T extends BasicItem>({
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer>
-          <Table
-            sx={{ minWidth: 480 }}
-            aria-labelledby="tableTitle"
-            size={'medium'}
-          >
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -150,6 +142,7 @@ const EnhancedTable = <T extends BasicItem>({
               {rows.sort(getComparator(order, orderBy)).map((row, index) => {
                 const isItemSelected = row.id == selected
                 return rowsRenderer({
+                  key: index,
                   row,
                   isItemSelected,
                   handleClick,

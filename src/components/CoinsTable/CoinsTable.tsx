@@ -7,6 +7,11 @@ import { getCoinList } from '../../services/coinGecko'
 import { CoinDetails } from '../../services/types'
 import { SelectedCoinState } from '../../context/selectedCoin'
 import EnhancedTable from '../shared/Table/Table'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import {
+  formatPercentage,
+  formatNumberWithCurrencySymbol,
+} from '../../helpers/formatters'
 
 interface ColumnCell {
   disablePadding: boolean
@@ -14,6 +19,8 @@ interface ColumnCell {
   label: string
   numeric: boolean
 }
+
+const MOBILE_DISABLED_COLUMNS_IDS = ['market_cap']
 
 const columns: ColumnCell[] = [
   {
@@ -43,12 +50,16 @@ const columns: ColumnCell[] = [
 ]
 
 function CoinList() {
+  const { currency } = CurrencyState()
+  const { selectedCoin, setSelectedCoin } = SelectedCoinState()
   const [coins, setCoins] = useState<CoinDetails[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const isDesktop = useMediaQuery('(min-width: 768px)')
 
-  const { currency } = CurrencyState()
-  const { selectedCoin, setSelectedCoin } = SelectedCoinState()
+  useEffect(() => {
+    fetchCoins()
+  }, [currency])
 
   const fetchCoins = async () => {
     setLoading(true)
@@ -61,18 +72,19 @@ function CoinList() {
     }
     setLoading(false)
   }
-
-  useEffect(() => {
-    fetchCoins()
-  }, [currency])
+  const filteredColumns = isDesktop
+    ? columns
+    : columns.filter((x) => !MOBILE_DISABLED_COLUMNS_IDS.includes(x.id))
 
   return (
     <EnhancedTable
       rows={coins}
-      columns={columns}
+      columns={filteredColumns}
       selectedCoin={selectedCoin.id}
       onRowClick={(row) => setSelectedCoin({ id: row.id, name: row.name })}
-      rowsRenderer={RowRenderer}
+      rowsRenderer={(props: RowRendererProps) => (
+        <RowRenderer {...props} isDesktop={isDesktop} currency={currency} />
+      )}
       defaultOrderBy={'market_cap'}
     />
   )
@@ -87,36 +99,20 @@ interface RowRendererProps {
   index: number
 }
 
+interface ExtraProps {
+  isDesktop: boolean
+  currency: string
+}
+
 const RowRenderer = ({
   row,
   isItemSelected,
   handleClick,
   index,
-}: RowRendererProps) => {
+  currency,
+  isDesktop,
+}: RowRendererProps & ExtraProps) => {
   const labelId = `enhanced-table-checkbox-${index}`
-
-  const { currency } = CurrencyState()
-
-  const formatNumberWithCurrencySymbol = (
-    number: number,
-    noFractionDigits: boolean = false
-  ) => {
-    /* todo: create a language context similar to currency.tsx */
-    const fractionDigits = noFractionDigits ? 0 : undefined
-    return number.toLocaleString('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    })
-  }
-
-  const formatPercentageNumber = (number: number) => {
-    const fixedNumber = number.toFixed(2)
-    return (
-      <div className={number < 0 ? 'negative' : 'positive'}>{fixedNumber}%</div>
-    )
-  }
 
   return (
     <TableRow
@@ -131,13 +127,15 @@ const RowRenderer = ({
         {row.name}
       </TableCell>
       <TableCell align="right">
-        {formatNumberWithCurrencySymbol(row.current_price)}
+        {formatNumberWithCurrencySymbol(row.current_price, currency)}
       </TableCell>
+      {isDesktop && (
+        <TableCell align="right">
+          {formatNumberWithCurrencySymbol(row.market_cap, currency, true)}
+        </TableCell>
+      )}
       <TableCell align="right">
-        {formatNumberWithCurrencySymbol(row.market_cap, true)}
-      </TableCell>
-      <TableCell align="right">
-        {formatPercentageNumber(row.price_change_percentage_24h)}
+        {formatPercentage(row.price_change_percentage_24h)}
       </TableCell>
     </TableRow>
   )

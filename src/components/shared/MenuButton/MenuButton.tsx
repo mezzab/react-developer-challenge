@@ -7,14 +7,14 @@ import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 
 interface MenuButtonProps {
   options: string[]
-  label: string | JSX.Element
+  selected: string | JSX.Element
   onSelect?: (selected: string) => void
 }
 
 export default function MenuButton({
   options,
   onSelect,
-  label,
+  selected,
 }: MenuButtonProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const isOpen = Boolean(anchorEl)
@@ -40,7 +40,7 @@ export default function MenuButton({
         onClick={handleClick}
       >
         <>
-          {label}
+          {selected}
           {isOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
         </>
       </Button>

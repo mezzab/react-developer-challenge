@@ -1,8 +1,18 @@
 import { ReactElement, useEffect, useState } from 'react'
-import { VictoryChart, VictoryAxis, VictoryTheme, VictoryLine } from 'victory'
+import {
+  VictoryChart,
+  VictoryAxis,
+  VictoryLine,
+  VictoryTooltip,
+  VictoryBar,
+} from 'victory'
 import { getCoinHistory } from '../../services/coinGecko'
 import { CurrencyState } from '../../context/currency'
-import { formatChartData } from '../../helpers/formatChartData'
+import {
+  formatChartData,
+  formatNumberWithCurrencySymbol,
+  formatTime,
+} from '../../helpers/formatters'
 import { CoinHistory, Error } from '../../services/types'
 import { SelectedCoinState } from '../../context/selectedCoin'
 import Button from '@mui/material/Button'
@@ -11,6 +21,8 @@ import Box from '@mui/material/Box'
 import { ChartDaysOptions } from '../../config/config'
 import { CircularProgress, Paper } from '@mui/material'
 import './HistoryChart.css'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import MenuButton from '../shared/MenuButton/MenuButton'
 
 export default function HistoryChart(): ReactElement | null {
   const [loading, setLoading] = useState(false)
@@ -18,6 +30,7 @@ export default function HistoryChart(): ReactElement | null {
   const { currency } = CurrencyState()
   const [days, setDays] = useState('30')
   const [coinHistory, setCoinHistory] = useState<CoinHistory | null>(null)
+  const [activePoint, setActivePoint] = useState(null)
   const { selectedCoin } = SelectedCoinState()
 
   useEffect(() => {
@@ -40,10 +53,6 @@ export default function HistoryChart(): ReactElement | null {
 
   const coinPrices = formatChartData(coinHistory?.prices)
 
-  const timeFormatting = (timestamp: number): string | number => {
-    return new Date(timestamp).toLocaleDateString()
-  }
-
   return (
     <Paper sx={{ width: '100%', mb: 2, textAlign: 'center' }}>
       <Box
@@ -55,21 +64,7 @@ export default function HistoryChart(): ReactElement | null {
       >
         <div className="selectedCoin"> {selectedCoin.name} </div>
         {loading && <CircularProgress />}
-        <ButtonGroup variant="contained" aria-label="primary button group">
-          {ChartDaysOptions.map((x, i) => {
-            const selected = x.value === days
-            return (
-              <Button
-                key={i}
-                aria-selected={selected}
-                color={selected ? 'primary' : 'inherit'}
-                onClick={() => setDays(x.value)}
-              >
-                {x.label}
-              </Button>
-            )
-          })}
-        </ButtonGroup>
+        <ChartDaysOptionsRender days={days} setDays={setDays} />
       </Box>
 
       <VictoryChart
@@ -89,7 +84,7 @@ export default function HistoryChart(): ReactElement | null {
             tickLabels: { fontSize: 6 },
           }}
           orientation="bottom"
-          tickFormat={timeFormatting}
+          tickFormat={formatTime}
         />
         <VictoryAxis
           style={{
@@ -99,7 +94,7 @@ export default function HistoryChart(): ReactElement | null {
           }}
           dependentAxis
           orientation="left"
-          // tickFormat={(x) => `${currencyFormatting.format(x)}`}
+          tickFormat={(x) => `${formatNumberWithCurrencySymbol(x, currency)}`}
           label=""
           standalone={true}
         />
@@ -107,7 +102,7 @@ export default function HistoryChart(): ReactElement | null {
           style={{
             data: {
               stroke: '#1976d2',
-              strokeWidth: 0.5,
+              strokeWidth: 0.2,
             },
             labels: { fontSize: 6 },
             parent: { border: '1px solid #ccc' },
@@ -119,4 +114,42 @@ export default function HistoryChart(): ReactElement | null {
       </VictoryChart>
     </Paper>
   )
+}
+
+const ChartDaysOptionsRender = ({ setDays, days }: any) => {
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  if (isDesktop) {
+    return (
+      <ButtonGroup variant="contained" aria-label="primary button group">
+        {ChartDaysOptions.map((x, i) => {
+          const selected = x.value === days
+          return (
+            <Button
+              key={i}
+              aria-selected={selected}
+              color={selected ? 'primary' : 'inherit'}
+              onClick={() => setDays(x.value)}
+            >
+              {x.label}
+            </Button>
+          )
+        })}
+      </ButtonGroup>
+    )
+  } else {
+    const onSelect = (o: string) => {
+      setDays(ChartDaysOptions.find((x) => x.label === o)!.value)
+    }
+
+    const selected = ChartDaysOptions.find((x) => x.value === days)!.label
+    return (
+      <MenuButton
+        // todo(improvement): allow MenuButton to receive different types of `options`
+        options={ChartDaysOptions.map((x) => x.label)}
+        onSelect={onSelect}
+        selected={selected}
+      />
+    )
+  }
 }
