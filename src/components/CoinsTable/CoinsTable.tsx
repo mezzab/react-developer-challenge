@@ -21,7 +21,10 @@ interface ColumnCell {
   numeric: boolean
 }
 
-const MOBILE_DISABLED_COLUMNS_IDS = ['market_cap']
+const MOBILE_DISABLED_COLUMNS_IDS = [
+  'market_cap',
+  'price_change_percentage_24h',
+]
 
 const columns: ColumnCell[] = [
   {
@@ -117,6 +120,7 @@ const RowRenderer = <T extends CoinDetails>({
 }: RowRendererProps<T> & ExtraProps) => {
   const labelId = `enhanced-table-checkbox-${index}`
 
+  const perc24hsChange = formatPercentage(row.price_change_percentage_24h)
   return (
     <TableRow
       hover
@@ -131,15 +135,14 @@ const RowRenderer = <T extends CoinDetails>({
       </TableCell>
       <TableCell align="right">
         {formatNumberWithCurrencySymbol(row.current_price, currency)}
+        {!isDesktop && perc24hsChange}
       </TableCell>
       {isDesktop && (
         <TableCell align="right">
           {formatNumberWithCurrencySymbol(row.market_cap, currency, true)}
         </TableCell>
       )}
-      <TableCell align="right">
-        {formatPercentage(row.price_change_percentage_24h)}
-      </TableCell>
+      {isDesktop && <TableCell align="right">{perc24hsChange}</TableCell>}
     </TableRow>
   )
 }

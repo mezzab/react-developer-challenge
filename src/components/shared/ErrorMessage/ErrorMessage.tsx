@@ -3,8 +3,6 @@ import { toast } from 'react-toastify'
 
 import { Error } from '../../../services/types'
 
-import './ErrorMessage.css'
-
 const ErrorMessage = ({ error }: { error: Error | false }) => {
   useEffect(() => {
     if (error) {

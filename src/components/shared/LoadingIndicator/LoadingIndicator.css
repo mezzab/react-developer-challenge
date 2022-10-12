@@ -1,4 +1,6 @@
 .loadingIndicator {
   display: flex;
-  margin: 0 1em;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
 }

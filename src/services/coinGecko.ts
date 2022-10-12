@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { HistoricalChart, ListCoins, SingleCoin } from '../config/coinGeckoURLs'
 
-import { CoinDetails, CoinHistory, CoinInfo,KapowResponse } from './types'
+import { CoinDetails, CoinHistory, CoinInfo, KapowResponse } from './types'
 
 export async function getCoinList(
   currency: string

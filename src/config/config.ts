@@ -14,3 +14,19 @@ export const ChartDaysOptions = [
   { label: '1y', value: '365' },
   { label: 'max', value: 'max' },
 ]
+
+/*
+ * TODO(feature): add the ability to change theme and language
+
+enum Themes {
+  dark = 'dark',
+  light = 'light',
+}
+export const ThemeList = [Themes.dark, Themes.light]
+
+enum Languages {
+  en = 'en',
+  es = 'es',
+}
+export const LanguageList = [Languages.en, Languages.es]
+*/
