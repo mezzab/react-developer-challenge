@@ -13,8 +13,11 @@ type ErrorResponse<T> = {
 }
 
 /* - - - - - - - - - - - - - - - - - - API Responses - - - - - - - - - - - - - - - - - - */
-
-export interface CoinDetails {
+export interface BasicItem {
+  id: string
+  name: string
+}
+export interface CoinDetails extends BasicItem {
   ath: number
   ath_change_percentage: number
   ath_date: string
@@ -25,7 +28,6 @@ export interface CoinDetails {
   current_price: number
   fully_diluted_valuation: number
   high_24h: number
-  id: string
   image: string
   last_updated: string
   low_24h: number
@@ -34,7 +36,6 @@ export interface CoinDetails {
   market_cap_change_percentage_24h: number
   market_cap_rank: number
   max_supply: number
-  name: string
   price_change_24h: number
   price_change_percentage_24h: number
   symbol: string

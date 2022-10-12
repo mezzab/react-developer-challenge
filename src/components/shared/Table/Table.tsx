@@ -1,6 +1,6 @@
 import { MouseEvent, useState } from 'react'
-
 import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -8,8 +8,12 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
-import Paper from '@mui/material/Paper'
 import { visuallyHidden } from '@mui/utils'
+
+import { BasicItem, Error } from '../../../services/types'
+import ErrorMessage from '../ErrorMessage/ErrorMessage'
+import LoadingIndicator from '../LoadingIndicator/LoadingIndicator'
+
 import './Table.css'
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -45,9 +49,6 @@ interface EnhancedTableHeadProps<T> {
   order: Order
   orderBy: string
   columns: ColumnCell[]
-}
-interface BasicItem {
-  id: string
 }
 
 const EnhancedTableHead = <T extends BasicItem>(
@@ -102,6 +103,8 @@ interface EnhancedTableProps<T> {
   selectedCoin: string
   columns: ColumnCell[]
   defaultOrderBy: string
+  error: Error | false
+  loading: boolean
 }
 
 const EnhancedTable = <T extends BasicItem>({
@@ -111,6 +114,8 @@ const EnhancedTable = <T extends BasicItem>({
   columns,
   rowsRenderer,
   defaultOrderBy,
+  error,
+  loading,
 }: EnhancedTableProps<T>) => {
   const [order, setOrder] = useState<Order>('desc')
   const [orderBy, setOrderBy] = useState<string>(defaultOrderBy)
@@ -127,9 +132,13 @@ const EnhancedTable = <T extends BasicItem>({
     onRowClick && onRowClick(row)
   }
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+  const renderContent = () => {
+    if (loading) {
+      return <LoadingIndicator loading={loading} />
+    } else if (error) {
+      return <ErrorMessage error={error} />
+    } else {
+      return (
         <TableContainer>
           <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -152,6 +161,14 @@ const EnhancedTable = <T extends BasicItem>({
             </TableBody>
           </Table>
         </TableContainer>
+      )
+    }
+  }
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }} aria-busy={loading}>
+        {renderContent()}
       </Paper>
     </Box>
   )

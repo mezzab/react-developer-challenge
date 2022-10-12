@@ -1,17 +1,18 @@
 import { MouseEvent, useEffect, useState } from 'react'
-
-import { CurrencyState } from '../../context/currency'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
+
+import { CurrencyState } from '../../context/currency'
+import { SelectedCoinState } from '../../context/selectedCoin'
+import {
+  formatNumberWithCurrencySymbol,
+  formatPercentage,
+} from '../../helpers/formatters'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import { useRequestStatus } from '../../hooks/useRequestStatus'
 import { getCoinList } from '../../services/coinGecko'
 import { CoinDetails } from '../../services/types'
-import { SelectedCoinState } from '../../context/selectedCoin'
 import EnhancedTable from '../shared/Table/Table'
-import useMediaQuery from '../../hooks/useMediaQuery'
-import {
-  formatPercentage,
-  formatNumberWithCurrencySymbol,
-} from '../../helpers/formatters'
 
 interface ColumnCell {
   disablePadding: boolean
@@ -53,8 +54,8 @@ function CoinList() {
   const { currency } = CurrencyState()
   const { selectedCoin, setSelectedCoin } = SelectedCoinState()
   const [coins, setCoins] = useState<CoinDetails[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const { setStatusLoading, setStatusError, setStatusSuccess, loading, error } =
+    useRequestStatus()
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   useEffect(() => {
@@ -62,15 +63,15 @@ function CoinList() {
   }, [currency])
 
   const fetchCoins = async () => {
-    setLoading(true)
+    setStatusLoading()
     const res = await getCoinList(currency)
 
     if (res.success) {
+      setStatusSuccess()
       setCoins(res.value)
     } else {
-      // todo
+      setStatusError(res.error)
     }
-    setLoading(false)
   }
   const filteredColumns = isDesktop
     ? columns
@@ -82,20 +83,22 @@ function CoinList() {
       columns={filteredColumns}
       selectedCoin={selectedCoin.id}
       onRowClick={(row) => setSelectedCoin({ id: row.id, name: row.name })}
-      rowsRenderer={(props: RowRendererProps) => (
+      rowsRenderer={(props: RowRendererProps<CoinDetails>) => (
         <RowRenderer {...props} isDesktop={isDesktop} currency={currency} />
       )}
       defaultOrderBy={'market_cap'}
+      error={error}
+      loading={loading}
     />
   )
 }
 
 export default CoinList
 
-interface RowRendererProps {
-  row: CoinDetails
+interface RowRendererProps<T> {
+  row: T
   isItemSelected: boolean
-  handleClick: (e: MouseEvent<unknown>, r: CoinDetails) => void
+  handleClick: (e: MouseEvent<unknown>, r: T) => void
   index: number
 }
 
@@ -104,14 +107,14 @@ interface ExtraProps {
   currency: string
 }
 
-const RowRenderer = ({
+const RowRenderer = <T extends CoinDetails>({
   row,
   isItemSelected,
   handleClick,
   index,
   currency,
   isDesktop,
-}: RowRendererProps & ExtraProps) => {
+}: RowRendererProps<T> & ExtraProps) => {
   const labelId = `enhanced-table-checkbox-${index}`
 
   return (

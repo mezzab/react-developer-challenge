@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
 
 interface MenuButtonProps {
   options: string[]
@@ -31,8 +31,8 @@ export default function MenuButton({
   return (
     <div>
       <Button
-        id="demo-customized-button"
-        aria-controls={isOpen ? 'demo-customized-menu' : undefined}
+        id="customized-button"
+        aria-controls={isOpen ? 'customized-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={isOpen ? 'true' : undefined}
         variant="contained"

@@ -1,36 +1,35 @@
 import { ReactElement, useEffect, useState } from 'react'
-import {
-  VictoryChart,
-  VictoryAxis,
-  VictoryLine,
-  VictoryTooltip,
-  VictoryBar,
-} from 'victory'
-import { getCoinHistory } from '../../services/coinGecko'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import ButtonGroup from '@mui/material/ButtonGroup'
+import Paper from '@mui/material/Paper'
+import Grid from '@mui/material/Unstable_Grid2/Grid2'
+import { VictoryAxis, VictoryChart, VictoryLine } from 'victory'
+
+import { ChartDaysOptions } from '../../config/config'
 import { CurrencyState } from '../../context/currency'
+import { SelectedCoinState } from '../../context/selectedCoin'
 import {
   formatChartData,
   formatNumberWithCurrencySymbol,
   formatTime,
 } from '../../helpers/formatters'
-import { CoinHistory, Error } from '../../services/types'
-import { SelectedCoinState } from '../../context/selectedCoin'
-import Button from '@mui/material/Button'
-import ButtonGroup from '@mui/material/ButtonGroup'
-import Box from '@mui/material/Box'
-import { ChartDaysOptions } from '../../config/config'
-import { CircularProgress, Paper } from '@mui/material'
-import './HistoryChart.css'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { useRequestStatus } from '../../hooks/useRequestStatus'
+import { getCoinHistory } from '../../services/coinGecko'
+import { CoinHistory } from '../../services/types'
+import ErrorMessage from '../shared/ErrorMessage/ErrorMessage'
+import LoadingIndicator from '../shared/LoadingIndicator/LoadingIndicator'
 import MenuButton from '../shared/MenuButton/MenuButton'
 
+import './HistoryChart.css'
+
 export default function HistoryChart(): ReactElement | null {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<Error | null>(null) // todo: type this.
+  const { setStatusLoading, setStatusError, setStatusSuccess, loading, error } =
+    useRequestStatus()
   const { currency } = CurrencyState()
   const [days, setDays] = useState('30')
   const [coinHistory, setCoinHistory] = useState<CoinHistory | null>(null)
-  const [activePoint, setActivePoint] = useState(null)
   const { selectedCoin } = SelectedCoinState()
 
   useEffect(() => {
@@ -38,23 +37,29 @@ export default function HistoryChart(): ReactElement | null {
   }, [days, selectedCoin])
 
   const fetchCoinHistory = async () => {
-    setLoading(true)
+    setStatusLoading()
     const res = await getCoinHistory(selectedCoin.id, currency, days)
 
     if (res.success) {
+      setStatusSuccess()
+      //todo: we should probably store this data in order to avoid making a request every time
       setCoinHistory(res.value)
     } else {
-      setError(res.error)
+      setStatusError(res.error)
     }
-    setLoading(false)
   }
 
-  if (!coinHistory) return null // todo: loading
+  if (error || !coinHistory) {
+    return <ErrorMessage error={error} />
+  }
 
   const coinPrices = formatChartData(coinHistory?.prices)
 
   return (
-    <Paper sx={{ width: '100%', mb: 2, textAlign: 'center' }}>
+    <Paper
+      sx={{ width: '100%', mb: 2, textAlign: 'center' }}
+      aria-busy={loading}
+    >
       <Box
         sx={{
           padding: '2em',
@@ -62,8 +67,10 @@ export default function HistoryChart(): ReactElement | null {
           justifyContent: 'space-between',
         }}
       >
-        <div className="selectedCoin"> {selectedCoin.name} </div>
-        {loading && <CircularProgress />}
+        <div className="coinNameWrapper">
+          <div className="selectedCoin"> {selectedCoin.name} </div>
+          <LoadingIndicator loading={loading} />
+        </div>
         <ChartDaysOptionsRender days={days} setDays={setDays} />
       </Box>
 

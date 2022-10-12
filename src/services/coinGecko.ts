@@ -1,6 +1,8 @@
-import { HistoricalChart, ListCoins, SingleCoin } from '../config/coinGeckoURLs'
-import { KapowResponse, CoinDetails, CoinHistory, CoinInfo } from './types'
 import axios, { AxiosResponse } from 'axios'
+
+import { HistoricalChart, ListCoins, SingleCoin } from '../config/coinGeckoURLs'
+
+import { CoinDetails, CoinHistory, CoinInfo,KapowResponse } from './types'
 
 export async function getCoinList(
   currency: string

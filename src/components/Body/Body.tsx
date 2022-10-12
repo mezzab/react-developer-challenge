@@ -1,6 +1,7 @@
-import CoinList from '../CoinsTable/CoinsTable'
-import Grid from '@mui/material/Unstable_Grid2'
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Unstable_Grid2'
+
+import CoinList from '../CoinsTable/CoinsTable'
 import HistoryChart from '../HistoryChart/HistoryChart'
 
 const Body = () => {
