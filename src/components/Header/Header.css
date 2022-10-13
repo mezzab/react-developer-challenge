@@ -4,11 +4,11 @@ header {
   border-bottom: solid 3px #1565c0;
   margin-top: 0;
   margin-bottom: 0;
+  height: 97px;
 }
 
 .headerWrapper {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;

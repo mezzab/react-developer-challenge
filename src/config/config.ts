@@ -16,7 +16,7 @@ export const ChartDaysOptions = [
 ]
 
 /*
- * TODO(feature): add the ability to change theme and language
+ * todo(feature): add the ability to change theme and language
 
 enum Themes {
   dark = 'dark',

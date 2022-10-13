@@ -42,7 +42,7 @@ export default function HistoryChart(): ReactElement | null {
 
     if (res.success) {
       setStatusSuccess()
-      //todo: we should probably store this data in order to avoid making a request every time
+      //todo(improv): we should probably store this data in order to avoid making a request every time
       setCoinHistory(res.value)
     } else {
       setStatusError(res.error)
@@ -152,7 +152,7 @@ const ChartDaysOptionsRender = ({ setDays, days }: any) => {
     const selected = ChartDaysOptions.find((x) => x.value === days)!.label
     return (
       <MenuButton
-        // todo(improvement): allow MenuButton to receive different types of `options`
+        // todo(improv): allow MenuButton to receive different types of `options`
         options={ChartDaysOptions.map((x) => x.label)}
         onSelect={onSelect}
         selected={selected}

@@ -1,25 +1,29 @@
 h1 {
   font-size: 2em;
 }
+.App,
+#root {
+  height: 100%;
+}
 
 .responsiveMargin {
-  margin: 1em 20%;
+  margin: 0 20%;
 }
 
 @media only screen and (max-width: 600px) {
   .responsiveMargin {
-    margin: 1em 5%;
+    margin: 0 5%;
   }
 }
 
 @media only screen and (max-width: 800px) {
   .responsiveMargin {
-    margin: 1em 10%;
+    margin: 0 10%;
   }
 }
 
 @media only screen and (max-width: 1000px) {
   .responsiveMargin {
-    margin: 1em 15%;
+    margin: 0 15%;
   }
 }

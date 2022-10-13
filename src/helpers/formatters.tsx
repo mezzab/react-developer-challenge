@@ -15,7 +15,6 @@ export const formatNumberWithCurrencySymbol = (
   currency: string,
   noFractionDigits: boolean = false
 ) => {
-  //todo(feat): create a language context similar to currency.tsx
   const fractionDigits = noFractionDigits ? 0 : undefined
   return number.toLocaleString('en-US', {
     style: 'currency',

@@ -6,7 +6,14 @@ import HistoryChart from '../HistoryChart/HistoryChart'
 
 const Body = () => {
   return (
-    <Box className="responsiveMargin" sx={{ flexGrow: 1 }}>
+    <Box
+      className="responsiveMargin"
+      sx={{
+        flexGrow: 1,
+        paddingTop: '1em',
+        height: 'calc(100% - 125px - 2em)',
+      }}
+    >
       <Grid spacing={4}>
         <Grid>
           <CoinList />

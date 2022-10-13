@@ -22,7 +22,6 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        // todo: create a theme context (similar to currency context)
         theme="light"
       />
       <CurrencyContext>
