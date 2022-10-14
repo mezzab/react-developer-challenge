@@ -90,17 +90,18 @@ const EnhancedTableHead = <T extends BasicItem>(
   )
 }
 
+export interface RowRendererProps<T> {
+  key: number
+  row: T
+  isItemSelected: boolean
+  handleClick: (e: MouseEvent<unknown>, row: T) => void
+  index: number
+}
 interface EnhancedTableProps<T> {
   rows: T[]
-  rowsRenderer: (props: {
-    key: number
-    row: T
-    isItemSelected: boolean
-    handleClick: (e: MouseEvent<unknown>, row: T) => void
-    index: number
-  }) => JSX.Element
+  rowsRenderer: (props: RowRendererProps<T>) => JSX.Element
   onRowClick?: (row: T) => void
-  selectedCoin: string
+  selectedRowId: string
   columns: ColumnCell[]
   defaultOrderBy: string
   error: Error | false
@@ -110,7 +111,7 @@ interface EnhancedTableProps<T> {
 const EnhancedTable = <T extends BasicItem>({
   rows,
   onRowClick,
-  selectedCoin,
+  selectedRowId,
   columns,
   rowsRenderer,
   defaultOrderBy,
@@ -119,7 +120,7 @@ const EnhancedTable = <T extends BasicItem>({
 }: EnhancedTableProps<T>) => {
   const [order, setOrder] = useState<Order>('desc')
   const [orderBy, setOrderBy] = useState<string>(defaultOrderBy)
-  const [selected, setSelected] = useState<string>(selectedCoin)
+  const [selectedId, setSelectedId] = useState<string>(selectedRowId)
 
   const handleRequestSort = (event: MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc'
@@ -128,7 +129,7 @@ const EnhancedTable = <T extends BasicItem>({
   }
 
   const handleClick = (event: MouseEvent<unknown>, row: T) => {
-    setSelected(row.id)
+    setSelectedId(row.id)
     onRowClick && onRowClick(row)
   }
 
@@ -149,7 +150,7 @@ const EnhancedTable = <T extends BasicItem>({
             />
             <TableBody>
               {rows.sort(getComparator(order, orderBy)).map((row, index) => {
-                const isItemSelected = row.id == selected
+                const isItemSelected = row.id == selectedId
                 return rowsRenderer({
                   key: index,
                   row,

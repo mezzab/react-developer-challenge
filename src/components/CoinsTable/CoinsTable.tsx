@@ -84,7 +84,7 @@ function CoinList() {
     <EnhancedTable
       rows={coins}
       columns={filteredColumns}
-      selectedCoin={selectedCoin.id}
+      selectedRowId={selectedCoin.id}
       onRowClick={(row) => setSelectedCoin({ id: row.id, name: row.name })}
       rowsRenderer={(props: RowRendererProps<CoinDetails>) => (
         <RowRenderer {...props} isDesktop={isDesktop} currency={currency} />
