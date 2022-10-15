@@ -28,17 +28,17 @@ export default function HistoryChart(): ReactElement | null {
   const { setStatusLoading, setStatusError, setStatusSuccess, loading, error } =
     useRequestStatus()
   const { currency } = CurrencyState()
-  const [days, setDays] = useState('30')
+  const [day, setDay] = useState('30')
   const [coinHistory, setCoinHistory] = useState<CoinHistory | null>(null)
   const { selectedCoin } = SelectedCoinState()
 
   useEffect(() => {
     fetchCoinHistory()
-  }, [days, selectedCoin])
+  }, [day, selectedCoin])
 
   const fetchCoinHistory = async () => {
     setStatusLoading()
-    const res = await getCoinHistory(selectedCoin.id, currency, days)
+    const res = await getCoinHistory(selectedCoin.id, currency, day)
 
     if (res.success) {
       setStatusSuccess()
@@ -71,10 +71,11 @@ export default function HistoryChart(): ReactElement | null {
           <div className="selectedCoin"> {selectedCoin.name} </div>
           <LoadingIndicator loading={loading} />
         </div>
-        <ChartDaysOptionsRender days={days} setDays={setDays} />
+        <ChartDaysOptionsRender days={day} setDays={setDay} />
       </Box>
 
       <VictoryChart
+        aria-label={`${selectedCoin} ${day} chart`}
         height={150}
         width={300}
         padding={{ top: 20, bottom: 35, left: 40, right: 20 }}
@@ -134,7 +135,6 @@ const ChartDaysOptionsRender = ({ setDays, days }: any) => {
           return (
             <Button
               key={i}
-              aria-selected={selected}
               color={selected ? 'primary' : 'inherit'}
               onClick={() => setDays(x.value)}
             >

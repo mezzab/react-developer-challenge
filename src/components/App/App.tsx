@@ -28,7 +28,9 @@ function App() {
         <SelectedCoinContext>
           <>
             <Header />
-            <Body />
+            <main>
+              <Body />
+            </main>
             <Footer />
           </>
         </SelectedCoinContext>

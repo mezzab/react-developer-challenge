@@ -26,7 +26,7 @@ const MOBILE_DISABLED_COLUMNS_IDS = [
   'price_change_percentage_24h',
 ]
 
-const columns: ColumnCell[] = [
+export const columns: ColumnCell[] = [
   {
     id: 'name',
     numeric: false,
@@ -68,7 +68,6 @@ function CoinList() {
   const fetchCoins = async () => {
     setStatusLoading()
     const res = await getCoinList(currency)
-
     if (res.success) {
       setStatusSuccess()
       setCoins(res.value)
@@ -125,10 +124,10 @@ const RowRenderer = <T extends CoinDetails>({
     <TableRow
       hover
       onClick={(event) => handleClick(event, row)}
-      aria-checked={isItemSelected}
       tabIndex={-1}
       key={row.id}
       selected={isItemSelected}
+      data-testid={row.id}
     >
       <TableCell component="th" id={labelId} scope="row">
         {row.name}

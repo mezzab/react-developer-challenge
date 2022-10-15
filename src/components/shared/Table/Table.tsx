@@ -141,7 +141,7 @@ const EnhancedTable = <T extends BasicItem>({
     } else {
       return (
         <TableContainer>
-          <Table aria-labelledby="tableTitle">
+          <Table aria-label="top 5 crypto table">
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}

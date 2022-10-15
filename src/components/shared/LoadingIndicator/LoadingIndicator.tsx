@@ -12,7 +12,7 @@ const LoadingIndicator = ({
   if (loading) {
     return (
       <div className="loadingIndicator">
-        <CircularProgress size={size} />
+        <CircularProgress aria-label="loading icon" size={size} />
       </div>
     )
   } else {

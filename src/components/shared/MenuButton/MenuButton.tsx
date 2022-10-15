@@ -29,20 +29,24 @@ export default function MenuButton({
   }
 
   return (
-    <div>
+    <>
       <Button
-        id="customized-button"
         aria-controls={isOpen ? 'customized-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={isOpen ? 'true' : undefined}
         variant="contained"
         disableElevation
         onClick={handleClick}
+        aria-label={selected as string}
+        endIcon={
+          isOpen ? (
+            <KeyboardArrowUp aria-label="arrow up" />
+          ) : (
+            <KeyboardArrowDown aria-label="arrow down" />
+          )
+        }
       >
-        <>
-          {selected}
-          {isOpen ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-        </>
+        <>{selected}</>
       </Button>
       <Menu
         id="demo-customized-menu"
@@ -59,6 +63,6 @@ export default function MenuButton({
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </>
   )
 }

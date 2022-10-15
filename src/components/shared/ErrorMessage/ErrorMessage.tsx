@@ -8,7 +8,7 @@ const ErrorMessage = ({ error }: { error: Error | false }) => {
     if (error) {
       // this toast is already being wrapped with an element with a role="alert" attribute
       // so this message is already accesible.
-      toast(renderErrorMessage(), { type: 'error' })
+      toast(renderErrorMessage(error.message), { type: 'error' })
     }
   }, [error])
 

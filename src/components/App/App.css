@@ -1,6 +1,11 @@
 h1 {
   font-size: 2em;
 }
+
+main {
+  height: calc(100% - 125px);
+}
+
 .App,
 #root {
   height: 100%;
@@ -26,4 +31,9 @@ h1 {
   .responsiveMargin {
     margin: 0 15%;
   }
+}
+
+.MuiButton-containedPrimary {
+  /* we need this color in order to meet WCAG 2 AA contrast ratio thresholds */
+  background-color: #144a81 !important;
 }

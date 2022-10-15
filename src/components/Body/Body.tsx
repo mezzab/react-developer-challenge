@@ -11,7 +11,7 @@ const Body = () => {
       sx={{
         flexGrow: 1,
         paddingTop: '1em',
-        height: 'calc(100% - 125px - 2em)',
+        height: '100%',
       }}
     >
       <Grid spacing={4}>
