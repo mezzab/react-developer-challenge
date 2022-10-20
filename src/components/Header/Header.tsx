@@ -10,7 +10,7 @@ const Header = () => {
   return (
     <header>
       <div className="headerWrapper responsiveMargin">
-        <img src="/top5-logo-50px.png" alt="top 5 crypto logo" />
+        <img src="images/top5-logo-50px.png" alt="top 5 crypto logo" />
         <h1> Crypto Top 5 </h1>
         <Menu
           options={CurrencyList.map((x) => x.currency)}
