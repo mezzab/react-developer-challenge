@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.e0fc7bbc.css",
-    "main.js": "/static/js/main.23e42f80.js",
-    "static/js/787.ee52addc.chunk.js": "/static/js/787.ee52addc.chunk.js",
-    "index.html": "/index.html",
-    "main.e0fc7bbc.css.map": "/static/css/main.e0fc7bbc.css.map",
-    "main.23e42f80.js.map": "/static/js/main.23e42f80.js.map",
-    "787.ee52addc.chunk.js.map": "/static/js/787.ee52addc.chunk.js.map"
+    "main.css": "/react-developer-challenge/static/css/main.e0fc7bbc.css",
+    "main.js": "/react-developer-challenge/static/js/main.08d867c2.js",
+    "static/js/787.ee52addc.chunk.js": "/react-developer-challenge/static/js/787.ee52addc.chunk.js",
+    "index.html": "/react-developer-challenge/index.html",
+    "main.e0fc7bbc.css.map": "/react-developer-challenge/static/css/main.e0fc7bbc.css.map",
+    "main.08d867c2.js.map": "/react-developer-challenge/static/js/main.08d867c2.js.map",
+    "787.ee52addc.chunk.js.map": "/react-developer-challenge/static/js/787.ee52addc.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e0fc7bbc.css",
-    "static/js/main.23e42f80.js"
+    "static/js/main.08d867c2.js"
   ]
 }
