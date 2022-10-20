@@ -24,9 +24,9 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "yarn lint && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --coverage --silent",
+    "start": "yarn lint && react-app-env start",
+    "build": "react-app-env build",
+    "test": "react-app-env test --coverage --silent",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .tsx --ext .ts --fix",
     "storybook": "start-storybook -p 6006 -s public",
@@ -73,6 +73,7 @@
     "jest": "^29.2.0",
     "prettier": "^2.7.1",
     "prop-types": "^15.8.1",
+    "react-app-env": "^1.2.3",
     "webpack": "^5.74.0"
   },
   "eslintConfig": {
